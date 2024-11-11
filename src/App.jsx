@@ -64,7 +64,9 @@ export default function App() {
       {/* quiz  */}
       {showScore ? (
         <div className="score-section">
-          <h1>Your final Score is {score}</h1>
+          <h1>
+            Your final Score is {score} out of {questions.length} question.
+          </h1>
         </div>
       ) : (
         <div>
@@ -80,6 +82,10 @@ export default function App() {
                 {answer.answerText}
               </button>
             ))}
+          </div>
+          <div className="timer-container">
+            <span className="timer-text">Timer</span>
+            <button>Next Question</button>
           </div>
         </div>
       )}
