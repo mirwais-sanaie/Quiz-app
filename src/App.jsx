@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const questions = [
   {
     questionText: "What is the capital of France?",
@@ -38,9 +40,49 @@ const questions = [
 ];
 
 export default function App() {
+  const [activeQuestion, setActiveQuestion] = useState(0);
+  const [showScore, setShowScore] = useState(false);
+  const [score, setScore] = useState(0);
+
+  function handleAnswerClick(isCorrect) {
+    const nextQuestion = activeQuestion + 1;
+    if (nextQuestion < questions.length) {
+      setActiveQuestion((activeQuestion) => activeQuestion + 1);
+    } else {
+      setShowScore(true);
+    }
+
+    if (isCorrect) {
+      setScore((score) => score + 1);
+    }
+  }
+
+  // function handleAnswerRes(isCorrect) {}
+
   return (
-    <div>
-      <h1 className="text-center font-black text-4xl">Hello world</h1>
+    <div className="container">
+      {/* quiz  */}
+      {showScore ? (
+        <div className="score-section">
+          <h1>Your final Score is {score}</h1>
+        </div>
+      ) : (
+        <div>
+          <div className="question-text">
+            {questions[activeQuestion].questionText}
+          </div>
+          <div className="answer-text">
+            {questions[activeQuestion].answerOptions.map((answer, index) => (
+              <button
+                onClick={() => handleAnswerClick(answer.isCorrect)}
+                key={index}
+              >
+                {answer.answerText}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
