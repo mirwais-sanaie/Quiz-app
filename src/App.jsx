@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const questions = [
   {
@@ -43,6 +43,20 @@ export default function App() {
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
+  const [timer, setTimer] = useState(30);
+
+  useEffect(
+    function () {
+      if (timer === 0) return;
+
+      const timerInterval = setInterval(() => {
+        setTimer((timer) => timer - 1);
+      }, 1000);
+
+      return () => clearInterval(timerInterval); // first execute
+    },
+    [timer]
+  );
 
   function handleAnswerClick(isCorrect) {
     const nextQuestion = activeQuestion + 1;
@@ -73,20 +87,29 @@ export default function App() {
           <div className="question-text">
             {questions[activeQuestion].questionText}
           </div>
+
           <div className="answer-text">
             {questions[activeQuestion].answerOptions.map((answer, index) => (
               <button
                 onClick={() => handleAnswerClick(answer.isCorrect)}
                 key={index}
+                className="answer-buttons"
               >
                 {answer.answerText}
               </button>
             ))}
           </div>
+
           <div className="timer-container">
-            <span className="timer-text">Timer</span>
-            <button>Next Question</button>
+            <span className="timer-text">{timer}</span>
+            <button className="next-question">Next Question</button>
           </div>
+
+          {timer === 0 && (
+            <p className="text-red-600 text-2xl mx-14 mt-7">
+              Your time is Over!
+            </p>
+          )}
         </div>
       )}
     </div>

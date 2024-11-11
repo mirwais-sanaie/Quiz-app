@@ -84,7 +84,7 @@ body {
   justify-content: space-between;
 }
 
-.answer-text button {
+.answer-text .answer-buttons {
   width: 100%;
   font-size: 16px;
   color: #ffffff;
@@ -97,6 +97,9 @@ body {
   cursor: pointer;
   padding: 10px;
   margin-block: 5px;
+  &:hover {
+    background-color: #555e7d;
+  }
 }
 
 .correct {
@@ -107,14 +110,23 @@ body {
   background-color: #ff3333;
 }
 
-button:hover {
-  background-color: #555e7d;
-}
-
-button:focus {
+.answer-buttons,
+.next-question .answer-buttons:focus {
   outline: none;
 }
 
-button svg {
+.answer-buttons svg {
   margin-right: 5px;
+}
+.next-question {
+  height: 50px;
+  margin-top: 19px;
+  background-color: azure;
+  color: #252d4a;
+  border-radius: 20px;
+  padding: 10px 11px;
+  &:hover {
+    background-color: #555e7d;
+    color: #e5e5e5;
+  }
 }
