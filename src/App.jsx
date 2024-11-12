@@ -44,6 +44,7 @@ export default function App() {
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
   const [timer, setTimer] = useState(30);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
 
   useEffect(
     function () {
@@ -58,16 +59,20 @@ export default function App() {
     [timer]
   );
 
-  function handleAnswerClick(isCorrect) {
+  function handleAnswerClick(isCorrect, index) {
+    setSelectedAnswer(index);
+    if (isCorrect) setScore((score) => score + 1);
+  }
+
+  function handleNextQuestion() {
     const nextQuestion = activeQuestion + 1;
+    setSelectedAnswer(null); // Reset selected answer
+
     if (nextQuestion < questions.length) {
-      setActiveQuestion((activeQuestion) => activeQuestion + 1);
+      setActiveQuestion(nextQuestion);
+      setTimer(30); // Reset timer for next question
     } else {
       setShowScore(true);
-    }
-
-    if (isCorrect) {
-      setScore((score) => score + 1);
     }
   }
 
@@ -91,9 +96,11 @@ export default function App() {
           <div className="answer-text">
             {questions[activeQuestion].answerOptions.map((answer, index) => (
               <button
-                onClick={() => handleAnswerClick(answer.isCorrect)}
+                onClick={() => handleAnswerClick(answer.isCorrect, index)}
                 key={index}
-                className="answer-buttons"
+                className={`answer-buttons ${
+                  selectedAnswer === index ? "selected" : ""
+                }`} // Highlight selected answer
               >
                 {answer.answerText}
               </button>
@@ -102,7 +109,12 @@ export default function App() {
 
           <div className="timer-container">
             <span className="timer-text">{timer}</span>
-            <button className="next-question">Next Question</button>
+            <button
+              onClick={() => handleNextQuestion()}
+              className="next-question"
+            >
+              Next Question
+            </button>
           </div>
 
           {timer === 0 && (
