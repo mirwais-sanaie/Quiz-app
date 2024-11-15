@@ -61,7 +61,7 @@ export default function App() {
 
   function handleAnswerClick(isCorrect, index) {
     setSelectedAnswer(index);
-    if (isCorrect) setScore((score) => score + 1);
+    if (isCorrect) setScore((score) => (timer === 0 ? score : score + 1));
   }
 
   function handleNextQuestion() {
@@ -99,7 +99,11 @@ export default function App() {
                 onClick={() => handleAnswerClick(answer.isCorrect, index)}
                 key={index}
                 className={`answer-buttons ${
-                  selectedAnswer === index ? "selected" : ""
+                  timer === 0
+                    ? " inactive "
+                    : selectedAnswer === index
+                    ? "selected"
+                    : ""
                 }`} // Highlight selected answer
               >
                 {answer.answerText}
@@ -118,8 +122,11 @@ export default function App() {
           </div>
 
           {timer === 0 && (
-            <p className="text-red-600 text-2xl mx-14 mt-7">
-              Your time is Over!
+            <p className="text-center mt-7 flex flex-col">
+              <span className="text-red-600 text-2xl ">Your time is Over!</span>
+              <span className="text-red-200">
+                And your point from this question is 0
+              </span>
             </p>
           )}
         </div>
