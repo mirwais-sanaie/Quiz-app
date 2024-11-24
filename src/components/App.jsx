@@ -4,6 +4,7 @@ import Main from "./Main";
 import { useEffect } from "react";
 import Loader from "./Loader";
 import StartScreen from "./StartScreen";
+import Error from "./Error";
 
 const initialState = {
   questions: [],
@@ -13,10 +14,10 @@ const initialState = {
 function reducer(state, action) {
   switch (action.type) {
     case "dataRecieved":
-      return { ...state, questions: action.payload };
+      return { ...state, status: "succes", questions: action.payload };
     case "loading":
       return { ...state, status: "loading" };
-    case "error":
+    case "failed":
       return { ...state, status: "error" };
     default:
       return;
@@ -26,6 +27,8 @@ function reducer(state, action) {
 function App() {
   const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
 
+  const numOfQuestions = questions.length;
+
   useEffect(function () {
     async function getData() {
       try {
@@ -34,8 +37,7 @@ function App() {
         console.log(data);
         dispatch({ type: "dataRecieved", payload: data });
       } catch (error) {
-        console.log(error);
-        dispatch({ type: "error" });
+        dispatch({ type: "failed" });
       }
     }
 
@@ -48,7 +50,8 @@ function App() {
 
       <Main>
         {status === "loading" && <Loader />}
-        {status === "dataRecieved" && <StartScreen />}
+        {status === "succes" && <StartScreen numOfQuestions={numOfQuestions} />}
+        {status === "error" && <Error />}
       </Main>
     </div>
   );
