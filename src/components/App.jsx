@@ -24,6 +24,8 @@ function reducer(state, action) {
       return { ...state, status: "error" };
     case "active":
       return { ...state, status: "start" };
+    case "check":
+      return { ...state, answer: action.payload };
     default:
       return;
   }
@@ -63,7 +65,12 @@ function App() {
         )}
         {status === "error" && <Error />}
         {status === "start" && (
-          <Question question={questions[index]} index={index} answer={answer} />
+          <Question
+            dispatch={dispatch}
+            question={questions[index]}
+            index={index}
+            answer={answer}
+          />
         )}
       </Main>
     </div>

@@ -1,12 +1,18 @@
-function Options({ options, correctOption }) {
+function Options({ options, correctOption, answer, dispatch }) {
+  const hadAnswer = answer !== null;
+
   return (
     <div className="options">
       {options.map((option, index) => (
         <button
-          className={`btn btn-option ${
-            index === correctOption ? "correct" : "wrong"
+          disabled={hadAnswer}
+          onClick={() => {
+            dispatch({ type: "check", payload: index });
+          }}
+          className={`btn btn-option ${answer === index && "answer"} ${
+            hadAnswer ? (index === correctOption ? "correct" : "wrong") : ""
           }`}
-          key={option}
+          key={index}
         >
           {option}
         </button>
