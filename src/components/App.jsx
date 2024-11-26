@@ -6,12 +6,15 @@ import Loader from "./Loader";
 import StartScreen from "./StartScreen";
 import Error from "./Error";
 import Question from "./Question";
+import NextQuestion from "./NextQuestion";
+import PrograssBar from "./PrograssBar";
 
 const initialState = {
   questions: [],
   status: "loading",
   answer: null,
   index: 0,
+  points: 0,
 };
 
 function reducer(state, action) {
@@ -26,6 +29,8 @@ function reducer(state, action) {
       return { ...state, status: "start" };
     case "check":
       return { ...state, answer: action.payload };
+    case "newAnswer":
+      return { ...state, answer: null, index: state.index + 1 };
     default:
       return;
   }
@@ -65,12 +70,16 @@ function App() {
         )}
         {status === "error" && <Error />}
         {status === "start" && (
-          <Question
-            dispatch={dispatch}
-            question={questions[index]}
-            index={index}
-            answer={answer}
-          />
+          <>
+            <PrograssBar index={index} numOfQuestions={numOfQuestions} />
+            <Question
+              dispatch={dispatch}
+              question={questions[index]}
+              index={index}
+              answer={answer}
+            />
+            {answer !== null && <NextQuestion dispatch={dispatch} />}
+          </>
         )}
       </Main>
     </div>
