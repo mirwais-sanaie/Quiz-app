@@ -1,12 +1,12 @@
-function PrograssBar({ numOfQuestions, index }) {
+function PrograssBar({ numOfQuestions, index, points, totalPoints }) {
   return (
     <div className="progress">
-      <progress max={numOfQuestions} value={index}></progress>
+      <progress max={numOfQuestions} value={index + 1}></progress>
       <p>
         Question <strong>{index + 1}</strong> / {numOfQuestions}
       </p>
       <p>
-        <strong>0</strong> / 280 points
+        <strong>{points}</strong> / {totalPoints} points
       </p>
     </div>
   );

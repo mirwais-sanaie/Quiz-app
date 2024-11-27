@@ -28,7 +28,15 @@ function reducer(state, action) {
     case "active":
       return { ...state, status: "start" };
     case "check":
-      return { ...state, answer: action.payload };
+      const question = state.questions.at(state.index);
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      };
     case "newAnswer":
       return { ...state, answer: null, index: state.index + 1 };
     default:
@@ -37,12 +45,19 @@ function reducer(state, action) {
 }
 
 function App() {
-  const [{ questions, status, index, answer }, dispatch] = useReducer(
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
     reducer,
     initialState
   );
 
   const numOfQuestions = questions.length;
+  let total = [];
+  function add() {
+    questions.map((question) => total.push(question.points));
+  }
+  add();
+
+  const totalPoints = total.reduce((acc, cur) => acc + cur, 0);
 
   useEffect(function () {
     async function getData() {
@@ -71,7 +86,12 @@ function App() {
         {status === "error" && <Error />}
         {status === "start" && (
           <>
-            <PrograssBar index={index} numOfQuestions={numOfQuestions} />
+            <PrograssBar
+              points={points}
+              index={index}
+              numOfQuestions={numOfQuestions}
+              totalPoints={totalPoints}
+            />
             <Question
               dispatch={dispatch}
               question={questions[index]}

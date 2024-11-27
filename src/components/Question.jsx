@@ -8,6 +8,7 @@ function Question({ question, index, answer, dispatch }) {
       <Options
         options={question.options}
         correctOption={question.correctOption}
+        points={question.points}
         answer={answer}
         dispatch={dispatch}
       />
