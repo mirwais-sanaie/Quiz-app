@@ -8,6 +8,8 @@ import Error from "./Error";
 import Question from "./Question";
 import NextQuestion from "./NextQuestion";
 import PrograssBar from "./PrograssBar";
+import Timer from "./Timer";
+import FinishScreen from "./FinishScreen";
 
 const initialState = {
   questions: [],
@@ -15,6 +17,7 @@ const initialState = {
   answer: null,
   index: 0,
   points: 0,
+  timer: 0,
 };
 
 function reducer(state, action) {
@@ -39,16 +42,18 @@ function reducer(state, action) {
       };
     case "newAnswer":
       return { ...state, answer: null, index: state.index + 1 };
+    case "changeTime":
+      return { ...state, timer: action.payload };
+    case "finish":
+      return { ...state, status: "finish" };
     default:
       return;
   }
 }
 
 function App() {
-  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ questions, status, index, answer, points, timer }, dispatch] =
+    useReducer(reducer, initialState);
 
   const numOfQuestions = questions.length;
   let total = [];
@@ -84,6 +89,7 @@ function App() {
           <StartScreen dispatch={dispatch} numOfQuestions={numOfQuestions} />
         )}
         {status === "error" && <Error />}
+        {status === "finish" && <FinishScreen points={points} />}
         {status === "start" && (
           <>
             <PrograssBar
@@ -98,7 +104,18 @@ function App() {
               index={index}
               answer={answer}
             />
-            {answer !== null && <NextQuestion dispatch={dispatch} />}
+            <Timer
+              dispatch={dispatch}
+              timer={timer}
+              numOfQuestions={numOfQuestions}
+            />
+            {answer !== null && (
+              <NextQuestion
+                dispatch={dispatch}
+                numOfQuestions={numOfQuestions}
+                index={index}
+              />
+            )}
           </>
         )}
       </Main>
