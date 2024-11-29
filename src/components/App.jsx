@@ -17,7 +17,7 @@ const initialState = {
   answer: null,
   index: 0,
   points: 0,
-  timer: 0,
+  timer: 450,
 };
 
 function reducer(state, action) {
@@ -92,23 +92,29 @@ function App() {
         {status === "finish" && <FinishScreen points={points} />}
         {status === "start" && (
           <>
-            <PrograssBar
-              points={points}
-              index={index}
-              numOfQuestions={numOfQuestions}
-              totalPoints={totalPoints}
-            />
-            <Question
-              dispatch={dispatch}
-              question={questions[index]}
-              index={index}
-              answer={answer}
-            />
-            <Timer
-              dispatch={dispatch}
-              timer={timer}
-              numOfQuestions={numOfQuestions}
-            />
+            {timer === 0 ? (
+              <FinishScreen points={points} />
+            ) : (
+              <>
+                <PrograssBar
+                  points={points}
+                  index={index}
+                  numOfQuestions={numOfQuestions}
+                  totalPoints={totalPoints}
+                />
+                <Question
+                  dispatch={dispatch}
+                  question={questions[index]}
+                  index={index}
+                  answer={answer}
+                />
+                <Timer
+                  dispatch={dispatch}
+                  timer={timer}
+                  numOfQuestions={numOfQuestions}
+                />
+              </>
+            )}
             {answer !== null && (
               <NextQuestion
                 dispatch={dispatch}
