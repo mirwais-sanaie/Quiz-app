@@ -46,6 +46,12 @@ function reducer(state, action) {
       return { ...state, timer: action.payload };
     case "finish":
       return { ...state, status: "finish" };
+    case "restart":
+      return {
+        ...initialState,
+        questions: state.questions,
+        status: "succes",
+      };
     default:
       return;
   }
@@ -55,7 +61,7 @@ function App() {
   const [{ questions, status, index, answer, points, timer }, dispatch] =
     useReducer(reducer, initialState);
 
-  const numOfQuestions = questions.length;
+  const numOfQuestions = questions?.length;
   let total = [];
   function add() {
     questions.map((question) => total.push(question.points));
@@ -89,11 +95,13 @@ function App() {
           <StartScreen dispatch={dispatch} numOfQuestions={numOfQuestions} />
         )}
         {status === "error" && <Error />}
-        {status === "finish" && <FinishScreen points={points} />}
+        {status === "finish" && (
+          <FinishScreen points={points} dispatch={dispatch} />
+        )}
         {status === "start" && (
           <>
             {timer === 0 ? (
-              <FinishScreen points={points} />
+              <FinishScreen points={points} dispatch={dispatch} />
             ) : (
               <>
                 <PrograssBar
