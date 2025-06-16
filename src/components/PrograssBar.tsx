@@ -1,9 +1,20 @@
-function PrograssBar({ numOfQuestions, index, points, totalPoints }) {
+import useQuizStore from "../store/store";
+
+function PrograssBar() {
+  const { questions, currentQuestionIndex, points } = useQuizStore();
+  const totalPoints = questions.reduce(
+    (total, question) => total + question.points,
+    0
+  );
   return (
     <div className="progress">
-      <progress max={numOfQuestions} value={index + 1}></progress>
+      <progress
+        max={questions.length}
+        value={currentQuestionIndex + 1}
+      ></progress>
       <p>
-        Question <strong>{index + 1}</strong> / {numOfQuestions}
+        Question <strong>{currentQuestionIndex + 1}</strong> /{" "}
+        {questions.length}
       </p>
       <p>
         <strong>{points}</strong> / {totalPoints} points

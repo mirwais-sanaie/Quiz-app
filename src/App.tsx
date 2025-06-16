@@ -2,11 +2,13 @@ import Header from "./components/Header";
 import StartScreen from "./components/StartScreen";
 import Main from "./components/Main";
 import { useEffect, useState } from "react";
-import useStore from "./store/store";
 import Loader from "./components/Loader";
+import useQuizStore from "./store/store";
+import Question from "./components/Question";
+import PrograssBar from "./components/PrograssBar";
 
 function App() {
-  const { setQuestion } = useStore();
+  const { setQuestions, status } = useQuizStore();
   const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     setLoading(true);
@@ -14,7 +16,7 @@ function App() {
       const response = await fetch("http://localhost:8000/questions");
       const data = await response.json();
       if (response.ok) {
-        setQuestion(data);
+        setQuestions(data);
       }
       setLoading(false);
     }
@@ -22,7 +24,7 @@ function App() {
     getData().catch((error) => {
       console.error("Error fetching data:", error);
     });
-  }, [setQuestion]);
+  }, [setQuestions]);
 
   return (
     <div className="app">
@@ -32,7 +34,13 @@ function App() {
         <Loader />
       ) : (
         <Main>
-          <StartScreen />
+          {status === "ready" && <StartScreen />}
+          {status === "playing" && (
+            <>
+              <PrograssBar />
+              <Question />
+            </>
+          )}
         </Main>
       )}
     </div>

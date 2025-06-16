@@ -1,13 +1,17 @@
-function Options({ options, correctOption, answer, dispatch, points }) {
+type Options = {
+  options: string[];
+  correctOption: number;
+  answer: number | null;
+  points: number;
+};
+
+function Options({ options, correctOption, answer }: Options) {
   const hadAnswer = answer !== null;
   return (
     <div className="options">
       {options.map((option, index) => (
         <button
           disabled={hadAnswer}
-          onClick={() => {
-            dispatch({ type: "check", payload: index });
-          }}
           className={`btn btn-option ${answer === index && "answer"} ${
             hadAnswer ? (index === correctOption ? "correct" : "wrong") : ""
           }`}
