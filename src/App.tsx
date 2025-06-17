@@ -6,6 +6,10 @@ import Loader from "./components/Loader";
 import useQuizStore from "./store/store";
 import Question from "./components/Question";
 import PrograssBar from "./components/PrograssBar";
+import Footer from "./components/Footer";
+import NextButton from "./components/NextButton";
+import FinishScreen from "./components/FinishScreen";
+import Timer from "./components/Timer";
 
 function App() {
   const { setQuestions, status } = useQuizStore();
@@ -39,8 +43,13 @@ function App() {
             <>
               <PrograssBar />
               <Question />
+              <Footer>
+                <Timer />
+                <NextButton />
+              </Footer>
             </>
           )}
+          {status === "finished" && <FinishScreen />}
         </Main>
       )}
     </div>

@@ -6,7 +6,7 @@ import Loader from "./Loader";
 import StartScreen from "./StartScreen";
 import Error from "./Error";
 import Question from "./Question";
-import NextQuestion from "./NextQuestion";
+import NextQuestion from "./NextButton";
 import PrograssBar from "./PrograssBar";
 import Timer from "./Timer";
 import FinishScreen from "./FinishScreen";
